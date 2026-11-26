@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Профиль — Edenguide{% endblock %}
+{% block content %}
+<section class="page-shell" aria-labelledby="profile-title">
+  <div class="card">
+    <div class="card-header">
+      <p class="eyebrow">Личный раздел</p>
+      <h1 id="profile-title">Профиль</h1>
+      <p class="card-lead">Данные аккаунта и текущий статус доступа в системе.</p>
+    </div>
+
+    <dl class="meta">
+      <dt>Логин</dt>
+      <dd>{{ user.login }}</dd>
+      <dt>Роль</dt>
+      <dd>{{ user.role }}</dd>
+      <dt>Email</dt>
+      <dd>{{ user.email or "—" }}</dd>
+      <dt>Подписка</dt>
+      <dd>{{ user.subscription_status }}</dd>
+    </dl>
+  </div>
+</section>
+{% endblock %}

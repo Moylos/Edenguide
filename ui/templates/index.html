@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Edenguide — Тактическая база VALORANT{% endblock %}
+{% block content %}
+<section class="home-hero" aria-labelledby="home-title">
+  <div class="home-hero-grid">
+    <div class="home-hero-copy card">
+      <div class="home-hero-brand">
+        <img
+          class="home-hero-logo"
+          src="/static/img/logo.jpg"
+          alt="Логотип Edenguide"
+          width="88"
+          height="88"
+          decoding="async"
+        >
+        <div>
+          <p class="eyebrow">Тактическая база VALORANT</p>
+          <h1 id="home-title">Edenguide</h1>
+        </div>
+      </div>
+      <p class="home-lead">Гайды, система ролей, разборы и коучинг — всё, чтобы играть осознанно и прогрессировать в VALORANT. Изучай агентов, понимай мету и находи свой стиль игры.</p>
+      <div class="home-cta-row">
+        <a class="btn home-cta-btn" href="/tierlist">Система ролей</a>
+        <a class="btn btn-ghost home-cta-btn" href="/coaching">Коучинг</a>
+      </div>
+      <div class="home-quick-links" aria-label="Быстрые разделы">
+        <a class="home-quick-link" href="/library"><span class="home-quick-dot" aria-hidden="true"></span>Библиотека</a>
+        <a class="home-quick-link" href="/about"><span class="home-quick-dot" aria-hidden="true"></span>Об авторе</a>
+      </div>
+    </div>
+
+        <aside class="home-agents card" aria-labelledby="home-agents-title">
+      <div class="home-agents-head">
+        <div>
+          <p class="eyebrow">Ростер</p>
+          <h2 id="home-agents-title" class="home-agents-title">Агенты</h2>
+        </div>
+        <p class="home-agents-count" id="home-agents-count" aria-live="polite"></p>
+      </div>
+
+      <div id="home-agents-status" class="agents-status agents-status-compact" role="status" aria-live="polite">
+        <div class="agents-loading" aria-hidden="true">
+          <span class="agents-loading-bar"></span>
+        </div>
+        <p class="agents-status-text">Загрузка агентов...</p>
+      </div>
+
+      <div id="home-agents-list" class="home-agents-list" aria-label="Агенты VALORANT"></div>
+
+      <div id="home-agents-error" class="agents-error-compact" hidden>
+        <p class="agents-error-compact-text" id="home-agents-error-message">Не удалось загрузить агентов.</p>
+        <button type="button" class="btn btn-ghost agents-retry-btn agents-retry-btn-compact" id="home-agents-retry">Повторить</button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="home-sections" aria-labelledby="home-sections-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Навигация</p>
+      <h2 id="home-sections-title" class="section-title">Разделы Edenguide</h2>
+    </div>
+  </div>
+
+  <div class="home-sections-grid">
+    <a class="home-section-card card-link" href="/tierlist">
+      <span class="home-section-kicker">Система ролей</span>
+      <h3 class="home-section-name">Тирлист</h3>
+      <p class="home-section-desc">Авторская система функций агентов: Дайверы, Поукеры, Бравлеры и Универсалы. Понимай, кого и зачем брать.</p>
+      <span class="home-section-cta" aria-hidden="true">Открыть</span>
+    </a>
+
+    <a class="home-section-card card-link" href="/library">
+      <span class="home-section-kicker">База знаний</span>
+      <h3 class="home-section-name">Библиотека</h3>
+      <p class="home-section-desc">Гайды, статьи и разборы по агентам и картам. Структурированные материалы для роста скилла.</p>
+      <span class="home-section-cta" aria-hidden="true">Открыть</span>
+    </a>
+
+    <a class="home-section-card card-link" href="/coaching">
+      <span class="home-section-kicker">Услуги</span>
+      <h3 class="home-section-name">Коучинг</h3>
+      <p class="home-section-desc">Разбор VOD, индивидуальные и командные тренировки. Персональная работа над твоей игрой.</p>
+      <span class="home-section-cta" aria-hidden="true">Открыть</span>
+    </a>
+
+    <a class="home-section-card card-link" href="/about">
+      <span class="home-section-kicker">Доверие</span>
+      <h3 class="home-section-name">Об авторе</h3>
+      <p class="home-section-desc">Moylos — Head Coach LeafBound, турнирный опыт и соревновательные достижения всероссийского уровня.</p>
+      <span class="home-section-cta" aria-hidden="true">Открыть</span>
+    </a>
+  </div>
+</section>
+
+<script src="/static/js/agents.js" defer></script>
+{% endblock %}

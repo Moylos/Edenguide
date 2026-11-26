@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Тирлист агентов | Edenguide{% endblock %}
+{% block content %}
+<section class="page-hero" aria-labelledby="tierlist-title">
+  <div class="card page-hero-inner">
+    <p class="eyebrow">Тирлист</p>
+    <h1 id="tierlist-title">Тирлист агентов</h1>
+    <p class="card-lead">Актуальный тирлист агентов VALORANT. Гости могут смотреть расстановку, администраторы — перетаскивать агентов и сохранять изменения в базе.</p>
+  </div>
+</section>
+
+<section class="tierlist-board-section" aria-labelledby="tier-board-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Tiermaker</p>
+      <h2 id="tier-board-title" class="section-title">Доска тиров</h2>
+    </div>
+    <div class="tierlist-actions" id="tierlist-actions">
+      <span id="tierlist-status" class="tierlist-status" role="status" aria-live="polite"></span>
+      {% if is_admin %}
+      <button type="button" class="btn tierlist-save-btn" id="tierlist-save" disabled>Сохранить</button>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="tierlist-app" class="tierlist-app" data-admin="{{ '1' if is_admin else '0' }}" data-csrf="{{ csrf_token | default('') }}">
+    <div id="tierlist-loading" class="agents-status" role="status" aria-live="polite">
+      <div class="agents-loading" aria-hidden="true"><span class="agents-loading-bar"></span></div>
+      <p class="agents-status-text">Загрузка тирлиста...</p>
+    </div>
+
+    <div id="tierlist-board" class="tier-board" hidden aria-label="Тирлист агентов"></div>
+
+    <div id="tierlist-pool-wrap" class="tier-pool-wrap" hidden>
+      <div class="tier-pool-head">
+        <p class="eyebrow">Пул агентов</p>
+        <p class="muted tier-pool-hint" id="tier-pool-hint">Все агенты распределены по тирам.</p>
+      </div>
+      <div id="tierlist-pool" class="tier-pool" aria-label="Нераспределённые агенты"></div>
+    </div>
+
+    <div id="tierlist-error" class="agents-error-compact" hidden>
+      <p class="agents-error-compact-text" id="tierlist-error-message">Не удалось загрузить тирлист.</p>
+      <button type="button" class="btn btn-ghost agents-retry-btn agents-retry-btn-compact" id="tierlist-retry">Повторить</button>
+    </div>
+  </div>
+</section>
+
+<section class="roles-detail-section" aria-labelledby="roles-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Роли</p>
+      <h2 id="roles-title" class="section-title">Роли агентов подробно</h2>
+      <p class="section-lead">В Edenguide роли рассматриваются не только по официальному классу, но и по реальной функции в раунде: кто открывает пространство, кто берёт информацию, кто навязывает бой и кто адаптируется под задачу.</p>
+    </div>
+  </div>
+
+  <div class="role-grid role-grid-detailed">
+    <article class="role-card">
+      <div class="role-card-head">
+        <h3 class="role-card-title">Дайверы</h3>
+        <span class="tag">Entry / Space</span>
+      </div>
+      <p class="role-card-desc">Дайверы — первый контакт с обороной. Их задача — создать пространство, зайти на точку, забрать первую дуэль или вынудить противника потратить утилити. Они задают темп атаки и открывают раунд для команды.</p>
+      <div class="role-detail-block">
+        <p class="role-card-label">Сильные стороны</p>
+        <ul class="role-detail-list">
+          <li>Быстрый выход на плент и захват пространства.</li>
+          <li>Давление на защитников и форсирование ошибок.</li>
+          <li>Создание условий для трейда и выхода тиммейтов.</li>
+        </ul>
+      </div>
+      <div class="role-detail-block">
+        <p class="role-card-label">Типичные задачи</p>
+        <ul class="role-detail-list">
+          <li>Первый вход на сайт с флешкой/дымом/рывком.</li>
+          <li>Размен первого контакта или безопасный отход после информации.</li>
+          <li>Разрезание обороны и создание хаоса на execute.</li>
+        </ul>
+      </div>
+      <span class="role-card-label">Примеры агентов</span>
+      <div class="role-agents" aria-label="Примеры дайверов">
+        <span class="role-agent-chip">Jett</span><span class="role-agent-chip">Raze</span><span class="role-agent-chip">Neon</span><span class="role-agent-chip">Yoru</span><span class="role-agent-chip">Phoenix</span>
+      </div>
+    </article>
+
+    <article class="role-card">
+      <div class="role-card-head">
+        <h3 class="role-card-title">Бравлеры</h3>
+        <span class="tag">Fight / Control</span>
+      </div>
+      <p class="role-card-desc">Бравлеры навязывают и выигрывают бои. Они заходят вслед за дайвером или сами инициируют столкновение, ломают сетапы защиты, зачищают углы и удерживают позицию своей утилитой.</p>
+      <div class="role-detail-block">
+        <p class="role-card-label">Сильные стороны</p>
+        <ul class="role-detail-list">
+          <li>Сильный файт-потенциал в ближнем и среднем бою.</li>
+          <li>Утилити для выдавливания, оглушения и контроля углов.</li>
+          <li>Стабильность в ретейках и защитных столкновениях.</li>
+        </ul>
+      </div>
+      <div class="role-detail-block">
+        <p class="role-card-label">Типичные задачи</p>
+        <ul class="role-detail-list">
+          <li>Поддержка входа: флешка, стан, подавление, трейд.</li>
+          <li>Зачистка сложных углов и навязывание дуэлей на своих условиях.</li>
+          <li>Удержание плента после установки спайка.</li>
+        </ul>
+      </div>
+      <span class="role-card-label">Примеры агентов</span>
+      <div class="role-agents" aria-label="Примеры бравлеров">
+        <span class="role-agent-chip">Breach</span><span class="role-agent-chip">Skye</span><span class="role-agent-chip">KAY/O</span><span class="role-agent-chip">Iso</span><span class="role-agent-chip">Reyna</span>
+      </div>
+    </article>
+
+    <article class="role-card">
+      <div class="role-card-head">
+        <h3 class="role-card-title">Поукеры</h3>
+        <span class="tag">Info / Pick</span>
+      </div>
+      <p class="role-card-desc">Поукеры отвечают за информацию и безопасные пики. Они собирают данные о позициях противника, наказывают за лишние движения, контролируют фланги и дают команде преимущество до начала основного боя.</p>
+      <div class="role-detail-block">
+        <p class="role-card-label">Сильные стороны</p>
+        <ul class="role-detail-list">
+          <li>Ранняя информация и контроль карты.</li>
+          <li>Безопасные пики и наказание за ошибки противника.</li>
+          <li>Сдерживание пушей и защита от флангов.</li>
+        </ul>
+      </div>
+      <div class="role-detail-block">
+        <p class="role-card-label">Типичные задачи</p>
+        <ul class="role-detail-list">
+          <li>Проверка углов дронами, сканами или камерами.</li>
+          <li>Игра за пик/отход без лишнего риска.</li>
+          <li>Подготовка execute/ретейка точной информацией.</li>
+        </ul>
+      </div>
+      <span class="role-card-label">Примеры агентов</span>
+      <div class="role-agents" aria-label="Примеры поукеров">
+        <span class="role-agent-chip">Sova</span><span class="role-agent-chip">Fade</span><span class="role-agent-chip">Cypher</span><span class="role-agent-chip">Killjoy</span><span class="role-agent-chip">Chamber</span>
+      </div>
+    </article>
+
+    <article class="role-card">
+      <div class="role-card-head">
+        <h3 class="role-card-title">Универсалы</h3>
+        <span class="tag">Flex / Utility</span>
+      </div>
+      <p class="role-card-desc">Универсалы адаптируются под состав, карту и задачу раунда. Они могут усиливать вход, давать смоки, поддерживать команду утилитой или закрывать слабые места в плане команды.</p>
+      <div class="role-detail-block">
+        <p class="role-card-label">Сильные стороны</p>
+        <ul class="role-detail-list">
+          <li>Гибкость в ролях и стилях игры.</li>
+          <li>Сильная утилити для атаки и защиты.</li>
+          <li>Способность менять план по ходу раунда.</li>
+        </ul>
+      </div>
+      <div class="role-detail-block">
+        <p class="role-card-label">Типичные задачи</p>
+        <ul class="role-detail-list">
+          <li>Закрытие ключевых направлений смоками/стенами.</li>
+          <li>Поддержка execute и контроль темпа раунда.</li>
+          <li>Замена недостающей функции в составе.</li>
+        </ul>
+      </div>
+      <span class="role-card-label">Примеры агентов</span>
+      <div class="role-agents" aria-label="Примеры универсалов">
+        <span class="role-agent-chip">Omen</span><span class="role-agent-chip">Viper</span><span class="role-agent-chip">Astra</span><span class="role-agent-chip">Harbor</span><span class="role-agent-chip">Clove</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script src="/static/js/tierlist.js" defer></script>
+{% endblock %}

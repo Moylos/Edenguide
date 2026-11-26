@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Коучинг — Edenguide{% endblock %}
+{% block content %}
+<section class="page-hero" aria-labelledby="coaching-title">
+  <div class="card page-hero-inner">
+    <p class="eyebrow">Услуги</p>
+    <h1 id="coaching-title">Коучинг</h1>
+    <p class="card-lead">Персональная работа над твоей игрой в VALORANT. Разбираем ошибки, строим план роста и превращаем хаотичную практику в осознанный прогресс.</p>
+  </div>
+</section>
+
+<section aria-labelledby="formats-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Форматы</p>
+      <h2 id="formats-title" class="section-title">Выбери тариф</h2>
+    </div>
+  </div>
+
+  <div class="coaching-formats">
+    <a class="price-card price-card-link" href="https://boosty.to/moylosoff" target="_blank" rel="noopener noreferrer" aria-label="Тариф Адепт — 749 ₽ в месяц. Открыть на Boosty">
+      <p class="price-card-type">🟢 Уровень 1</p>
+      <h3 class="price-card-title">«Адепт»</h3>
+      <p class="price-card-price">749 ₽ <span>/ месяц</span></p>
+      <p class="price-card-desc">Для тех, кто хочет начать системно разбирать свою игру и получить доступ к комьюнити.</p>
+      <p class="price-card-subhead">Что входит:</p>
+      <ul class="price-card-list">
+        <li>Доступ в приватный чат в Discord (общение с такими же игроками, поиск тиммейтов).</li>
+        <li>1 текстовый разбор твоей демки в месяц (я укажу на твои системные ошибки по тайм-кодам).</li>
+        <li>Ответы на твои вопросы в формате «Вопрос-Ответ» по средам.</li>
+        <li>Доступ к архиву записей групповых лекций.</li>
+        <li>Статус VIP на твич-канале.</li>
+      </ul>
+      <p class="price-card-limit">Лимит мест: без ограничений</p>
+      <span class="price-card-cta" aria-hidden="true">Открыть на Boosty</span>
+    </a>
+
+    <a class="price-card price-card-featured price-card-link" href="https://boosty.to/moylosoff" target="_blank" rel="noopener noreferrer" aria-label="Тариф Аналитик — 1 499 ₽ в месяц. Открыть на Boosty">
+      <p class="price-card-type">🔴 Уровень 2</p>
+      <h3 class="price-card-title">«Аналитик»</h3>
+      <p class="price-card-price">1 499 ₽ <span>/ месяц</span></p>
+      <p class="price-card-desc">Для тех, кто готов погружаться в игру на макро-уровне, общаться со мной вживую и получать максимум фидбека.</p>
+      <p class="price-card-subhead">Что входит:</p>
+      <ul class="price-card-list">
+        <li>Всё, что в тарифе «Адепт».</li>
+        <li>2 групповых созвона в неделю по 1.5 часа (разбор теории, драфтов, тактик и наших ошибок в голосовом канале).</li>
+        <li>4 текстовых разбора твоих демок в месяц (полный аудит твоей игры).</li>
+        <li>Приоритетные ответы на вопросы.</li>
+        <li>Приоритетное право на участие в турнирах и ивентах Академии Valguide.</li>
+      </ul>
+      <p class="price-card-limit price-card-limit-warning">⚠️ Внимание: Лимит мест — 10 человек. Мне важно сохранить качество фидбека</p>
+      <span class="price-card-cta" aria-hidden="true">Открыть на Boosty</span>
+    </a>
+  </div>
+
+  <div class="coaching-cta" aria-labelledby="coaching-cta-title">
+    <div>
+      <p class="eyebrow">Подписка</p>
+      <h2 id="coaching-cta-title" class="coaching-cta-title">Готов работать над игрой?</h2>
+      <p>Выбери тариф и оформляй подписку на Boosty. После подписки получишь доступ к материалам и формату, который подходит под твои цели.</p>
+      <p class="coaching-cta-note">Boosty: <a href="https://boosty.to/moylosoff" target="_blank" rel="noopener noreferrer">boosty.to/moylosoff</a></p>
+    </div>
+    <div>
+      <a class="btn" href="https://boosty.to/moylosoff" target="_blank" rel="noopener noreferrer">Перейти на Boosty</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

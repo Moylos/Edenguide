@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}Админ-панель — Edenguide{% endblock %}
+{% block content %}
+<section class="page-hero" aria-labelledby="admin-title">
+  <div class="card page-hero-inner">
+    <p class="eyebrow">Администрирование</p>
+    <h1 id="admin-title">Панель редактирования</h1>
+    <p class="card-lead">Управляй статьями библиотеки, описаниями агентов и тирлистом прямо на сайте. Изменения применяются через защищённые API-запросы.</p>
+  </div>
+</section>
+
+<section
+  id="admin-panel-app"
+  class="admin-panel"
+  data-csrf="{{ csrf_token | default('') }}"
+  aria-label="Панель администратора"
+>
+  <div class="admin-tabs" role="tablist" aria-label="Разделы панели">
+    <button type="button" class="admin-tab is-active" role="tab" id="tab-articles" aria-selected="true" aria-controls="panel-articles" data-tab="articles">Статьи</button>
+    <button type="button" class="admin-tab" role="tab" id="tab-agents" aria-selected="false" aria-controls="panel-agents" data-tab="agents" tabindex="-1">Агенты</button>
+    <button type="button" class="admin-tab" role="tab" id="tab-tierlist" aria-selected="false" aria-controls="panel-tierlist" data-tab="tierlist" tabindex="-1">Тирлист</button>
+  </div>
+
+  <div id="admin-global-status" class="admin-status" role="status" aria-live="polite"></div>
+
+  <!-- Articles -->
+  <div id="panel-articles" class="admin-panel-section" role="tabpanel" aria-labelledby="tab-articles">
+    <div class="admin-grid">
+      <div class="admin-col">
+        <div class="section-head admin-section-head">
+          <div>
+            <p class="eyebrow">Библиотека</p>
+            <h2 class="section-title">Статьи</h2>
+          </div>
+          <button type="button" class="btn btn-ghost admin-btn-sm" id="article-new-btn">Новая статья</button>
+        </div>
+
+        <div id="articles-loading" class="agents-status" role="status" aria-live="polite">
+          <div class="agents-loading" aria-hidden="true"><span class="agents-loading-bar"></span></div>
+          <p class="agents-status-text">Загрузка статей...</p>
+        </div>
+        <div id="articles-error" class="admin-inline-error" hidden></div>
+        <div id="articles-empty" class="admin-empty" hidden>
+          <p class="eyebrow">Пока пусто</p>
+          <h3 class="admin-empty-title">Статей нет</h3>
+          <p class="muted">Создай первую статью, и она появится в библиотеке.</p>
+        </div>
+        <div id="articles-list" class="admin-list" hidden aria-label="Список статей"></div>
+      </div>
+
+      <div class="admin-col">
+        <div class="card admin-form-card">
+          <div class="card-header">
+            <p class="eyebrow" id="article-form-eyebrow">Редактор</p>
+            <h2 id="article-form-title">Новая статья</h2>
+          </div>
+
+          <form id="article-form" class="form" novalidate>
+            <input type="hidden" id="article-id" name="id" value="">
+
+            <div class="field">
+              <label class="field-label" for="article-title">Заголовок</label>
+              <input id="article-title" name="title" type="text" required maxlength="200" autocomplete="off" placeholder="Название статьи">
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="article-content">Содержание (Markdown)</label>
+              <textarea id="article-content" name="content" rows="14" required placeholder="Текст статьи в формате Markdown..."></textarea>
+              <p class="field-hint">Поддерживается Markdown: заголовки, списки, ссылки, код, цитаты.</p>
+            </div>
+
+            <div class="admin-form-grid">
+              <div class="field">
+                <label class="field-label" for="article-map">Карта</label>
+                <select id="article-map" name="map_id">
+                  <option value="">Не выбрана</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label" for="article-side">Сторона</label>
+                <select id="article-side" name="side_id">
+                  <option value="">Не выбрана</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label" for="article-role">Роль</label>
+                <select id="article-role" name="role_id">
+                  <option value="">Не выбрана</option>
+                </select>
+              </div>
+            </div>
+
+            <fieldset class="field admin-fieldset">
+              <legend class="field-label">Персонажи</legend>
+              <p class="field-hint">Выбери агентов, к которым относится статья.</p>
+              <div id="article-characters" class="admin-checkbox-grid" aria-label="Персонажи статьи">
+                <p class="muted admin-muted-sm">Загрузка списка...</p>
+              </div>
+            </fieldset>
+
+            <div id="article-form-status" class="admin-form-status" role="status" aria-live="polite"></div>
+
+            <div class="admin-form-actions">
+              <button type="submit" class="btn" id="article-save-btn">Сохранить статью</button>
+              <button type="button" class="btn btn-ghost" id="article-reset-btn">Очистить форму</button>
+              <button type="button" class="btn btn-danger admin-delete-btn" id="article-delete-btn" hidden>Удалить</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agents -->
+  <div id="panel-agents" class="admin-panel-section" role="tabpanel" aria-labelledby="tab-agents" hidden>
+    <div class="admin-grid">
+      <div class="admin-col">
+        <div class="section-head admin-section-head">
+          <div>
+            <p class="eyebrow">Персонажи</p>
+            <h2 class="section-title">Агенты</h2>
+          </div>
+        </div>
+
+        <div id="agents-loading" class="agents-status" role="status" aria-live="polite">
+          <div class="agents-loading" aria-hidden="true"><span class="agents-loading-bar"></span></div>
+          <p class="agents-status-text">Загрузка агентов...</p>
+        </div>
+        <div id="agents-error" class="admin-inline-error" hidden></div>
+        <div id="agents-empty" class="admin-empty" hidden>
+          <p class="eyebrow">Пока пусто</p>
+          <h3 class="admin-empty-title">Агенты не найдены</h3>
+          <p class="muted">Список персонажей пуст или недоступен.</p>
+        </div>
+        <div id="agents-list" class="admin-list" hidden aria-label="Список агентов"></div>
+      </div>
+
+      <div class="admin-col">
+        <div class="card admin-form-card">
+          <div class="card-header">
+            <p class="eyebrow">Редактор</p>
+            <h2 id="character-form-title">Выбери агента</h2>
+          </div>
+
+          <form id="character-form" class="form" novalidate>
+            <input type="hidden" id="character-id" name="id" value="">
+
+            <div class="field">
+              <label class="field-label" for="character-name">Имя</label>
+              <input id="character-name" name="name" type="text" required maxlength="120" autocomplete="off" placeholder="Имя агента">
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="character-role">Роль</label>
+              <select id="character-role" name="role_id" required>
+                <option value="">Выбери роль</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="character-icon-url">URL иконки</label>
+              <input id="character-icon-url" name="icon_url" type="text" maxlength="500" autocomplete="off" placeholder="https://...">
+              <p class="field-hint">Ссылка на изображение агента/иконку.</p>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="character-description">Описание</label>
+              <textarea id="character-description" name="description" rows="8" placeholder="Описание агента..."></textarea>
+            </div>
+
+            <div id="character-form-status" class="admin-form-status" role="status" aria-live="polite"></div>
+
+            <div class="admin-form-actions">
+              <button type="submit" class="btn" id="character-save-btn" disabled>Сохранить агента</button>
+              <button type="button" class="btn btn-ghost" id="character-reset-btn">Сбросить</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tierlist -->
+  <div id="panel-tierlist" class="admin-panel-section" role="tabpanel" aria-labelledby="tab-tierlist" hidden>
+    <div class="card admin-tierlist-card">
+      <div class="card-header">
+        <p class="eyebrow">Tiermaker</p>
+        <h2>Управление тирлистом</h2>
+        <p class="card-lead">Редактирование тирлиста уже реализовано на странице тирлиста: для администратора доступен drag-and-drop и сохранение.</p>
+      </div>
+      <div class="admin-tierlist-actions">
+        <a class="btn admin-btn-inline" href="/tierlist">Открыть тирлист</a>
+        <p class="muted admin-muted-sm">На странице <code>/tierlist</code> войди под админом, перетащи агентов между тирами и нажми «Сохранить».</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="/static/js/admin_panel.js" defer></script>
+{% endblock %}

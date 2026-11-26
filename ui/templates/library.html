@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Библиотека — Edenguide{% endblock %}
+{% block content %}
+<section class="page-hero" aria-labelledby="library-title">
+  <div class="card page-hero-inner">
+    <p class="eyebrow">База знаний</p>
+    <h1 id="library-title">Библиотека</h1>
+    <p class="card-lead">Гайды, статьи и разборы по VALORANT. Структурированные материалы по агентам, картам и тактикам — чтобы находить нужные знания быстро.</p>
+  </div>
+</section>
+
+<section aria-labelledby="library-content-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Материалы</p>
+      <h2 id="library-content-title" class="section-title">Гайды и разборы</h2>
+    </div>
+  </div>
+
+  {% set articles = articles | default([]) %}
+  {% set ns = namespace(maps=[], roles=[], sides=[], characters=[]) %}
+  {% for a in articles %}
+    {% if a.map and a.map not in ns.maps %}{% set ns.maps = ns.maps + [a.map] %}{% endif %}
+    {% if a.role and a.role not in ns.roles %}{% set ns.roles = ns.roles + [a.role] %}{% endif %}
+    {% if a.side and a.side not in ns.sides %}{% set ns.sides = ns.sides + [a.side] %}{% endif %}
+    {% for c in a.characters | default([]) %}
+      {% if c and c not in ns.characters %}{% set ns.characters = ns.characters + [c] %}{% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  <form class="library-controls" role="search" aria-label="Фильтры библиотеки" onsubmit="return false;">
+    <div class="field">
+      <label class="field-label" for="library-search">Поиск</label>
+      <input id="library-search" type="text" name="q" placeholder="Название, агент, карта..." autocomplete="off">
+    </div>
+    <div class="field">
+      <label class="field-label" for="library-character">Агент</label>
+      <select id="library-character" name="character">
+        <option value="">Все агенты</option>
+        {% for c in ns.characters | sort %}
+        <option value="{{ c }}">{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label" for="library-map">Карта</label>
+      <select id="library-map" name="map">
+        <option value="">Все карты</option>
+        {% for m in ns.maps | sort %}
+        <option value="{{ m }}">{{ m }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label" for="library-role">Роль</label>
+      <select id="library-role" name="role">
+        <option value="">Все роли</option>
+        {% for r in ns.roles | sort %}
+        <option value="{{ r }}">{{ r }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label" for="library-side">Сторона</label>
+      <select id="library-side" name="side">
+        <option value="">Все стороны</option>
+        {% for s in ns.sides | sort %}
+        <option value="{{ s }}">{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+
+  <div id="library-grid" class="library-grid">
+    {% for article in articles %}
+    {% set excerpt = article.content_md | default('') | replace('#', '') | replace('*', '') | replace('_', '') | replace('`', '') | replace('>', '') | replace('[', '') | replace(']', '') | replace('(', '') | replace(')', '') | trim %}
+    <article class="article-card"
+      data-title="{{ article.title | e }}"
+      data-map="{{ article.map | default('', true) | e }}"
+      data-role="{{ article.role | default('', true) | e }}"
+      data-side="{{ article.side | default('', true) | e }}"
+      data-characters="{{ (article.characters | default([])) | join('|') | e }}">
+      <div class="article-meta">
+        {% if article.map %}<span class="tag">{{ article.map }}</span>{% endif %}
+        {% if article.side %}<span class="tag tag-muted">{{ article.side }}</span>{% endif %}
+        {% if article.role %}<span class="tag tag-muted">{{ article.role }}</span>{% endif %}
+        {% for c in article.characters | default([]) %}
+        <span class="tag tag-muted">{{ c }}</span>
+        {% endfor %}
+        {% if not article.map and not article.side and not article.role and not (article.characters | default([])) %}
+        <span class="tag tag-muted">Гайд</span>
+        {% endif %}
+      </div>
+      <h3 class="article-title">{{ article.title }}</h3>
+      <p class="article-desc">{{ excerpt | truncate(180, true, '...') }}</p>
+
+      <div class="article-body" id="article-body-{{ article.id }}" hidden>
+        <div class="article-content">{{ article.content_html | safe }}</div>
+      </div>
+
+      <div class="article-footer">
+        <span>{{ article.created_at[:10] if article.created_at else 'Статья' }}</span>
+        <button type="button" class="article-toggle" data-target="article-body-{{ article.id }}" aria-expanded="false" aria-controls="article-body-{{ article.id }}">Читать</button>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div id="library-empty" class="library-empty" {% if articles %}hidden{% endif %}>
+    <p class="eyebrow">{% if articles %}Нет результатов{% else %}Пока пусто{% endif %}</p>
+    <h3 class="library-empty-title">{% if articles %}Материалы не найдены{% else %}Статей пока нет{% endif %}</h3>
+    <p class="muted" id="library-empty-text">{% if articles %}Попробуй изменить фильтры или поисковый запрос.{% else %}Новые гайды и разборы появятся здесь, как только будут опубликованы.{% endif %}</p>
+  </div>
+</section>
+
+<script src="/static/js/library.js" defer></script>
+{% endblock %}

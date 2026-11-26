@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Вход — Edenguide{% endblock %}
+{% block content %}
+<section class="auth-layout" aria-labelledby="login-title">
+  <div class="auth-aside">
+    <p class="eyebrow">Доступ к системе</p>
+    <h1 id="login-title">Вход</h1>
+    <p class="card-lead">Авторизуйся, чтобы открыть профиль и персональные разделы Edenguide.</p>
+    <div class="auth-kicker" aria-hidden="true">
+      <span>Защищённая сессия</span>
+      <span>Тёмный интерфейс</span>
+      <span>VALORANT discipline</span>
+    </div>
+  </div>
+
+  <div class="card auth-card">
+    <div class="card-header">
+      <p class="eyebrow">Идентификация</p>
+      <h2>Войти в аккаунт</h2>
+    </div>
+
+    {% if error %}
+      <div class="alert" role="alert">
+        <strong>Ошибка</strong>
+        <span>{{ error }}</span>
+      </div>
+    {% endif %}
+
+    <form method="post" action="/login" class="form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <div class="field">
+        <label class="field-label" for="login">Логин</label>
+        <input id="login" type="text" name="login" required autocomplete="username" autocapitalize="off" spellcheck="false">
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="password">Пароль</label>
+        <input id="password" type="password" name="password" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="btn">Войти</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

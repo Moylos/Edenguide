@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Агент — Edenguide{% endblock %}
+{% block content %}
+{% set slug = agent_slug | default(agent_name | default('')) %}
+<div id="agent-detail" data-agent-slug="{{ slug | e }}">
+  <div id="agent-status" class="agents-status agent-detail-status" role="status" aria-live="polite">
+    <div class="agents-loading" aria-hidden="true">
+      <span class="agents-loading-bar"></span>
+    </div>
+    <p class="agents-status-text">Загрузка агента...</p>
+  </div>
+
+  <div id="agent-error" class="agents-error card" hidden>
+    <p class="eyebrow">Ошибка</p>
+    <h2 class="agents-error-title">Агент не найден</h2>
+    <p class="muted" id="agent-error-message">Не удалось загрузить данные агента. Проверь ссылку или попробуй позже.</p>
+    <div class="agent-detail-actions">
+      <a class="btn" href="/">Все агенты</a>
+      <button type="button" class="btn btn-ghost" id="agent-retry">Повторить</button>
+    </div>
+  </div>
+
+  <article id="agent-content" hidden aria-labelledby="agent-name">
+    <section class="page-hero">
+      <div class="agent-detail-hero">
+        <div class="agent-detail-portrait">
+          <img id="agent-portrait" src="" alt="" width="512" height="512" decoding="async">
+        </div>
+        <div class="agent-detail-info">
+          <p class="eyebrow">Агент</p>
+          <h1 id="agent-name" class="agent-detail-name"></h1>
+          <p id="agent-role" class="agent-detail-role"></p>
+          <p id="agent-description" class="agent-detail-desc"></p>
+          <div class="agent-detail-actions">
+            <a class="btn btn-ghost" href="/">← Все агенты</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="abilities-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Навыки</p>
+          <h2 id="abilities-title" class="section-title">Способности</h2>
+        </div>
+      </div>
+      <div id="agent-abilities" class="abilities-grid"></div>
+    </section>
+  </article>
+</div>
+
+<script src="/static/js/agent-detail.js" defer></script>
+{% endblock %}

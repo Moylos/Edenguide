@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agents": {
+    "backend-dev": {
+      "description": "Пишет бэкенд на Python/Flask, отвечает за app.py и БД.",
+      "mode": "primary",
+      "file": ".opencode/agents/backend-dev.md"
+    },
+    "frontend-dev": {
+      "description": "Frontend-разработчик (HTML/CSS/Jinja2).",
+      "mode": "primary",
+      "file": ".opencode/agents/frontend-dev.md"
+    },
+    "tester": {
+      "description": "QA-тестировщик. Анализирует код, ищет баги.",
+      "mode": "subagent",
+      "file": ".opencode/agents/tester.md"
+    },
+    "head": {
+      "description": "Диспетчер задач. По команде пользователя передаёт задачи другим ИИ-агентам, сам ничего не изменяет.",
+      "mode": "primary",
+      "file": ".opencode/agents/head.md"
+    }
+  }
+}
